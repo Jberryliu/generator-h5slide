@@ -1,16 +1,21 @@
 {
     "name": "generator-h5slide",
-    "version": "1.0.0",
-    "description": "h5 slide generator",
+    "version": "0.0.1",
+    "description": "HTML5 滑动组件生成器",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "mocha"
     },
     "keywords": [
         "yeoman-generator",
         "slide"
     ],
-    "author": "berry",
+    "repository": "Jberryliu/generator-h5slides",
+    "author": {
+        "name": "Berry Liu",
+        "email": "liuyz0602@163.com",
+        "url": "https://github.com/Jberryliu"
+    },
     "license": "MIT",
     "devDependencies": {
         "grunt": "^0.4.5",
@@ -26,5 +31,8 @@
     },
     "dependencies": {
         "yeoman-generator": "^0.18.7"
+    },
+    "bugs": {
+        "url": "https://github.com/Jberryliu/generator-h5slide/issues"
     }
 }
