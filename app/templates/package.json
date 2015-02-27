@@ -1,0 +1,20 @@
+{
+  "name": "h5slide",
+  "version": "1.0.0",
+  "description": "h5 slide",
+  "author": "berry",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-copy": "^0.7.0",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-less": "^1.0.0",
+    "grunt-contrib-uglify": "^0.7.0",
+    "grunt-include-replace": "^2.0.0",
+    "grunt-template": "^0.2.3",
+    "load-grunt-tasks": "^3.1.0",
+    "time-grunt": "^1.0.0"
+  }
+}
