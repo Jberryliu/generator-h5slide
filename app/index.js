@@ -83,7 +83,7 @@ module.exports = yeoman.generators.Base.extend({
         fileList.forEach(function (file) {
             this.fs.copy(
                 file,
-                file.replace('/app/templates', '/src')
+                file.replace(this.templatePath(), this.destinationPath('src'))
             );
         }.bind(this));
 
