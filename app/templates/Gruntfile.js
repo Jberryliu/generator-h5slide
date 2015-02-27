@@ -16,7 +16,7 @@ module.exports = function (grunt) {
             game: {
                 files: [
                     {
-                        src: ['slide?/*.js', 'base/js/*.js']
+                        src: ['src/slide?/*.js', 'src/base/js/*.js']
                     }
                 ]
             }
@@ -29,8 +29,8 @@ module.exports = function (grunt) {
             game: {
                 files: [
                     {
-                        src: ['lib/css/*.css', 'base/css/*.css', 'slide?/*.less'],
-                        dest: 'dest/base.min.css'
+                        src: ['src/lib/css/*.css', 'src/base/css/*.css', 'src/slide?/*.less'],
+                        dest: 'output/base.min.css'
                     }
                 ]
             }
@@ -39,7 +39,7 @@ module.exports = function (grunt) {
             game: {
                 files: [
                     {
-                        src: ['slide?/*.html'],
+                        src: ['src/slide?/*.html'],
                         dest: 'tmp/template.html'
                     }
                 ]
@@ -54,8 +54,8 @@ module.exports = function (grunt) {
             game: {
                 files: [
                     {
-                        src: ['lib/**/*.js', 'base/js/*.js', 'slide?/*.js'],
-                        dest: 'dest/base.min.js'
+                        src: ['src/lib/**/*.js', 'src/base/js/*.js', 'src/slide?/*.js'],
+                        dest: 'output/base.min.js'
                     }
                 ]
             }
@@ -64,8 +64,8 @@ module.exports = function (grunt) {
             game: {
                 files: [
                     {
-                        src: ['slide?/img/*.{png,jpg,jpeg,gif}', 'base/img/*.{png,jpg,jpeg,gif}'],
-                        dest: 'dest/img',
+                        src: ['src/slide?/img/*.{png,jpg,jpeg,gif}', 'src/base/img/*.{png,jpg,jpeg,gif}'],
+                        dest: 'output/img',
                         expand: true,
                         flatten: true
                     }
@@ -76,7 +76,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: [<%= src %>],
-                        dest: 'lib',
+                        dest: 'src/lib',
                         expand: true,
                         flatten: true
                     }
@@ -88,8 +88,8 @@ module.exports = function (grunt) {
             game: {
                 files: [
                     {
-                        src: 'index.html',
-                        dest: 'dest/index.html'
+                        src: 'src/index.html',
+                        dest: 'output/index.html'
                     }
 
                 ]
@@ -106,7 +106,7 @@ module.exports = function (grunt) {
             yo: {
                 files: [
                     {
-                        src: ['base', 'dest', 'lib', 'slide?', 'index.html']
+                        src: ['src']
                     }
                 ]
             }

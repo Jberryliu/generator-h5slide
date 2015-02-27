@@ -6,7 +6,6 @@
 var util = require('util');
 var fs = require('fs');
 var yeoman = require('yeoman-generator');
-var chalk = require('chalk');
 
 module.exports = yeoman.generators.Base.extend({
     constructor: function () {
@@ -16,7 +15,6 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     initializing: function () {
-        this.log('哈哈哈哈');
     },
 
     prompting: function () {
@@ -76,7 +74,7 @@ module.exports = yeoman.generators.Base.extend({
         //生成主入口文件
         this.fs.copyTpl(
             this.templatePath('index.html'),
-            this.destinationPath('index.html'),
+            this.destinationPath('src/index.html'),
             this.userOption
         );
 
@@ -85,7 +83,7 @@ module.exports = yeoman.generators.Base.extend({
         fileList.forEach(function (file) {
             this.fs.copy(
                 file,
-                file.replace('/app/templates', '')
+                file.replace('/app/templates', '/src')
             );
         }.bind(this));
 
@@ -96,10 +94,9 @@ module.exports = yeoman.generators.Base.extend({
         if (!!slidesNumber) {
             for (var i = 1; i < (slidesNumber + 1); ++i) {
                 exts.forEach(function (ext) {
-                    this.mkdir('slide' + i);
                     this.fs.copyTpl(
                         this.templatePath('slide/slide' + ext),
-                        this.destinationPath('slide' + i + '/slide' + i + ext),
+                        this.destinationPath('src/slide' + i + '/slide' + i + ext),
                         {
                             slideIndex: i
                         }
@@ -107,9 +104,8 @@ module.exports = yeoman.generators.Base.extend({
                 }.bind(this));
                 this.fs.copy(
                     this.templatePath('slide/img/bg.jpg'),
-                    this.destinationPath('slide' + i + '/img/bg.jpg')
+                    this.destinationPath('src/slide' + i + '/img/bg.jpg')
                 );
-
             }
         }
 
@@ -147,7 +143,6 @@ module.exports = yeoman.generators.Base.extend({
 
         });
 
-
         //生成 grunt 配置文件
         this.fs.copyTpl(
             this.templatePath('Gruntfile.js'),
@@ -158,7 +153,7 @@ module.exports = yeoman.generators.Base.extend({
         );
 
         //生成 node 配置文件
-        this.fs.copyTpl(
+        this.fs.copy(
             this.templatePath('package.json'),
             this.destinationPath('package.json')
         );
@@ -179,6 +174,20 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     install: function () {
+        this.log('安装 grunt 及其插件。');
+
+        this.installDependencies({
+            callback: function () {
+                this.log('grunt 及其插件安装完毕。');
+
+                this._installLibs();
+            }.bind(this)
+        });
+
+
+    },
+
+    _installLibs: function () {
         var libs = this.userOption.libs;
 
         //安装 并 复制 各种库文件
@@ -186,7 +195,7 @@ module.exports = yeoman.generators.Base.extend({
             this.npmInstall(libs, function () {
                 this.log('将 npm 安装的库复制到 lib 文件夹中。');
 
-                //install 里竟然不能 copy 文件，为啥？？？
+                //install 里竟然不能 copy 文件，等待 yeoman 的 issue 解决
                 var gruntTask = this.spawnCommand('grunt', ['copy:lib']);
 
                 gruntTask.on('close', function (code) {
@@ -201,6 +210,7 @@ module.exports = yeoman.generators.Base.extend({
         }
 
     },
+
     end: function () {
         //存储用户默认配置
         this.config.set('author', this.defaultOption.user);
