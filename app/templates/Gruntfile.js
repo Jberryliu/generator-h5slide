@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: ['src/slide?/*.html'],
-                        dest: 'tmp/template.html'
+                        dest: 'src/tmp/template.html'
                     }
                 ]
             }

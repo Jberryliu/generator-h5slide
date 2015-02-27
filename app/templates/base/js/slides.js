@@ -5,9 +5,6 @@ define('slides', [], function () {
         this.$slides = null;
         this.slidesConf = [];
 
-        this.config = {
-            mode: 'vertical'
-        };
 
         this.init();
         this.bindEvents();
@@ -23,12 +20,19 @@ define('slides', [], function () {
             var windowWidth = $(window).width(),
                 windowHeight = $(window).height();
 
+            var config = {
+                mode: 'vertical',
+                onSlideChangeStart: $.proxy(this.beforeProcess, this),
+                onSlideChangeEnd: $.proxy(this.afterProcess, this)
+            };
+
+
             this.$slides = $('.swiper-container')
                 .css({
                     width: windowWidth,
                     height: windowHeight
                 })
-                .swiper(this.config);
+                .swiper(config);
 
         },
 
@@ -40,9 +44,6 @@ define('slides', [], function () {
                 e.preventDefault();
             });
 
-            //竟然不能链式调用
-            this.$slides.addCallback('SlideChangeStart', $.proxy(this.beforeProcess, this));
-            this.$slides.addCallback('SlideChangeEnd', $.proxy(this.afterProcess, this));
         },
 
         /*
