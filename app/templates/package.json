@@ -13,7 +13,6 @@
     "grunt-contrib-less": "^1.0.0",
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-include-replace": "^2.0.0",
-    "grunt-template": "^0.2.3",
     "load-grunt-tasks": "^3.1.0",
     "time-grunt": "^1.0.0"
   }

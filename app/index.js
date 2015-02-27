@@ -157,6 +157,12 @@ module.exports = yeoman.generators.Base.extend({
             }
         );
 
+        //生成 node 配置文件
+        this.fs.copyTpl(
+            this.templatePath('package.json'),
+            this.destinationPath('package.json')
+        );
+
     },
 
     /*
