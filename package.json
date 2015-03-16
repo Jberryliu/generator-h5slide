@@ -1,6 +1,6 @@
 {
     "name": "generator-h5slide",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "HTML5 滑动组件生成器",
     "main": "index.js",
     "scripts": {
