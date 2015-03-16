@@ -5,6 +5,12 @@ define('slides', [], function () {
         this.$slides = null;
         this.slidesConf = [];
 
+        this.config = {
+            direction: 'vertical',
+            //没有 API，也不能链式调用 --!
+            onSlideChangeStart: $.proxy(this.beforeProcess, this),
+            onSlideChangeEnd: $.proxy(this.afterProcess, this)
+        };
 
         this.init();
         this.bindEvents();
@@ -20,19 +26,12 @@ define('slides', [], function () {
             var windowWidth = $(window).width(),
                 windowHeight = $(window).height();
 
-            var config = {
-                mode: 'vertical',
-                onSlideChangeStart: $.proxy(this.beforeProcess, this),
-                onSlideChangeEnd: $.proxy(this.afterProcess, this)
-            };
-
-
             this.$slides = $('.swiper-container')
                 .css({
                     width: windowWidth,
                     height: windowHeight
                 })
-                .swiper(config);
+                .swiper(this.config);
 
         },
 
@@ -64,8 +63,9 @@ define('slides', [], function () {
          滑动的处理
          */
         process: function (slide, type) {
-            var activeSlide = slide.activeSlide(),
-                callback = this.selActiveSlide(slide);
+            var activeIndex = slide.activeIndex,
+                activeSlide = slide.slides[activeIndex],
+                callback = this.selActiveSlide(activeIndex);
 
             if (callback) {
                 callback[type].call(this, $(activeSlide));
@@ -93,9 +93,9 @@ define('slides', [], function () {
         /*
          选中激活的页面属性
          */
-        selActiveSlide: function (slide) {
-            var conf = null,
-                activeIndex = slide.activeIndex;
+        selActiveSlide: function (activeIndex) {
+            var conf = null;
+
             this.slidesConf.forEach(function (value) {
                 if (value.index === activeIndex) {
                     conf = value;

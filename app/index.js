@@ -47,9 +47,8 @@ module.exports = yeoman.generators.Base.extend({
             {
                 type: 'checkbox',
                 name: 'libs',
-                message: 'Select required libs: (click "space" for choosing)',
-                choices: ['zepto', 'swiper', 'seajs', 'kinetic', 'animate.css'],
-                default: ['zepto', 'swiper', 'seajs']
+                message: 'Select required extend libs: (click "space" for choosing)',
+                choices: ['kinetic', 'animate.css']
             },
             {
                 name: 'slidesNumber',
@@ -78,15 +77,6 @@ module.exports = yeoman.generators.Base.extend({
             this.userOption
         );
 
-        //生成基础文件
-        var fileList = this.expand(this.templatePath('base/**/*.*'));
-        fileList.forEach(function (file) {
-            this.fs.copy(
-                file,
-                file.replace(this.templatePath(), this.destinationPath('src'))
-            );
-        }.bind(this));
-
         //生成 滑动页面
         var slidesNumber = parseInt(this.userOption.slidesNumber),
             exts = ['.html', '.js', '.less'];
@@ -109,47 +99,82 @@ module.exports = yeoman.generators.Base.extend({
             }
         }
 
+        //生成基础文件
+        var fileList = this.expand(this.templatePath('base/**/*.*'));
+        fileList.forEach(function (file) {
+            if (file.indexOf('init_slides') !== -1) {
+
+                this.fs.copyTpl(
+                    file,
+                    file.replace(this.templatePath(), this.destinationPath('src')),
+                    {
+                        requires: this._getRequires(slidesNumber)
+                    }
+                );
+            } else {
+                this.fs.copy(
+                    file,
+                    file.replace(this.templatePath(), this.destinationPath('src'))
+                );
+
+            }
+
+        }.bind(this));
+
         this._copyLibs();
 
 
     },
 
-    _copyLibs: function () {
-        var libs = this.userOption.libs,
-            src = [];
+    _getRequires: function (i) {
+        var requires = '';
 
+        while (i > 0) {
+            requires += 'require("slide' + i + '");';
+            i--;
+        }
+
+        return requires;
+    },
+
+    _copyLibs: function () {
+        var libs = this.userOption.libs;
+
+        //copy 基础组件 ['sea.js', 'swiper', 'zepot']
+        this.fs.copy(
+            this.templatePath('lib/lib.js'),
+            this.destinationPath('src/lib/lib.js')
+        );
+        this.fs.copy(
+            this.templatePath('lib/swiper.min.css'),
+            this.destinationPath('src/lib/swiper.min.css')
+        );
+
+        //copy 附加组件 ['kinetic', 'animate.css']
         libs.forEach(function (lib) {
-            //['zepto', 'swiper', 'seajs', 'kinetic', 'animate.css']
             switch (lib) {
-                case 'zepto':
-                    src.push('node_modules/zepto/zepto.min.js');
-                    break;
-                case 'swiper':
-                    src.push('node_modules/swiper/dist/idangerous.swiper.min.js');
-                    src.push('node_modules/swiper/dist/idangerous.swiper.css');
-                    break;
-                case 'seajs':
-                    src.push('node_modules/seajs/dist/sea.js');
-                    break;
                 case 'kinetic':
-                    src.push('node_modules/kinetic/kinetic.min.js');
+                    this.fs.copy(
+                        this.templatePath('lib/extend/kinetic.min.js'),
+                        this.destinationPath('src/lib/kinetic.min.js')
+                    );
                     break;
                 case 'animate.css':
-                    src.push('node_modules/animate.css/animate.css');
+                    this.fs.copy(
+                        this.templatePath('lib/extend/animate.css'),
+                        this.destinationPath('src/lib/animate.css')
+                    );
                     break;
                 default:
                     this.log('不存在的库。');
             }
 
-        });
+        }.bind(this));
 
         //生成 grunt 配置文件
-        this.fs.copyTpl(
+        this.fs.copy(
             this.templatePath('Gruntfile.js'),
-            this.destinationPath('Gruntfile.js'),
-            {
-                src: this._arr2String(src)
-            }
+            this.destinationPath('Gruntfile.js')
         );
 
         //生成 node 配置文件
@@ -180,13 +205,16 @@ module.exports = yeoman.generators.Base.extend({
             callback: function () {
                 this.log('grunt 及其插件安装完毕。');
 
-                this._installLibs();
+                //this._installLibs();
             }.bind(this)
         });
 
 
     },
 
+    /*
+     没有必要获取最新的库文件，放弃调用
+     */
     _installLibs: function () {
         var libs = this.userOption.libs;
 

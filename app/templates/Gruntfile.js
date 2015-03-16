@@ -13,7 +13,7 @@ module.exports = function (grunt) {
     //project configuration
     grunt.initConfig({
         jshint: {
-            game: {
+            all: {
                 files: [
                     {
                         src: ['src/slide?/*.js', 'src/base/js/*.js']
@@ -26,22 +26,35 @@ module.exports = function (grunt) {
             options: {
                 compress: true
             },
-            game: {
+            all: {
                 files: [
                     {
-                        src: ['src/lib/css/*.css', 'src/base/css/*.css', 'src/slide?/*.less'],
+                        src: ['src/lib/*.css', 'src/base/css/*.css', 'src/slide?/*.less'],
                         dest: 'output/base.min.css'
                     }
                 ]
             }
         },
         concat: {
-            game: {
+            html: {
                 files: [
                     {
                         src: ['src/slide?/*.html'],
                         dest: 'src/tmp/template.html'
                     }
+                ]
+            },
+            js: {
+                files:[
+                    {
+                        src: ['src/lib/*.js'],
+                        dest: 'output/lib.min.js'
+                    },
+                    {
+                        src: ['src/base/js/*.js', 'src/slide?/*.js'],
+                        dest: 'output/base.min.js'
+                    }
+
                 ]
             }
         },
@@ -51,17 +64,21 @@ module.exports = function (grunt) {
                     drop_console: true
                 }
             },
-            game: {
+            all: {
                 files: [
                     {
-                        src: ['src/lib/**/*.js', 'src/base/js/*.js', 'src/slide?/*.js'],
+                        src: ['src/lib/*.js'],
+                        dest: 'output/lib.min.js'
+                    },
+                    {
+                        src: ['src/base/js/*.js', 'src/slide?/*.js'],
                         dest: 'output/base.min.js'
                     }
                 ]
             }
         },
         copy: {
-            game: {
+            all: {
                 files: [
                     {
                         src: ['src/slide?/img/*.{png,jpg,jpeg,gif}', 'src/base/img/*.{png,jpg,jpeg,gif}'],
@@ -71,21 +88,10 @@ module.exports = function (grunt) {
                     }
 
                 ]
-            },
-            lib: {
-                files: [
-                    {
-                        src: [<%= src %>],
-                        dest: 'src/lib',
-                        expand: true,
-                        flatten: true
-                    }
-
-                ]
             }
         },
         includereplace: {
-            game: {
+            all: {
                 files: [
                     {
                         src: 'src/index.html',
@@ -96,7 +102,7 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            game: {
+            all: {
                 files: [
                     {
                         src: 'tmp'
@@ -118,6 +124,7 @@ module.exports = function (grunt) {
 
 
     //default task
-    grunt.registerTask('default', ['jshint', 'less', 'concat', 'uglify', 'includereplace', 'copy:game', 'clean:game']);
+    grunt.registerTask('default', ['jshint', 'less', 'concat:html', 'uglify', 'includereplace', 'copy', 'clean:all']);
+    grunt.registerTask('dev', ['jshint', 'less', 'concat', 'includereplace', 'copy', 'clean:all']);
 
 };
