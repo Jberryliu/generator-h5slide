@@ -4,10 +4,10 @@
 seajs.config({
     charset: 'utf-8',
     alias: {
-        init_slides: 'base.min.js'
+        init: 'base.min.js'
     }
 });
 
 // 加载入口模块
-seajs.use('init_slides');
+seajs.use('init');
 

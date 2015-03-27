@@ -10,9 +10,14 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
 
+    //loading images
+    grunt.config.images = [];
     //project configuration
     grunt.initConfig({
         jshint: {
+            options:{
+                debug: true
+            },
             all: {
                 files: [
                     {
@@ -22,74 +27,144 @@ module.exports = function (grunt) {
             }
         },
 
-        less: {
-            options: {
-                compress: true
-            },
-            all: {
-                files: [
-                    {
-                        src: ['src/lib/*.css', 'src/base/css/*.css', 'src/slide?/*.less'],
-                        dest: 'output/base.min.css'
-                    }
-                ]
-            }
-        },
         concat: {
-            html: {
-                files: [
-                    {
-                        src: ['src/slide?/*.html'],
-                        dest: 'src/tmp/template.html'
-                    }
-                ]
-            },
-            js: {
-                files:[
-                    {
-                        src: ['src/lib/*.js'],
-                        dest: 'output/lib.min.js'
-                    },
-                    {
-                        src: ['src/base/js/*.js', 'src/slide?/*.js'],
-                        dest: 'output/base.min.js'
-                    }
-
-                ]
-            }
-        },
-        uglify: {
-            options: {
-                compress: {
-                    drop_console: true
-                }
-            },
             all: {
+                options: {
+                    process: function (content, src) {
+                        var filePaths = src.split('/'),
+                            fileCata = filePaths[1];
+
+                        var reg = /__uri\(([\s\S]+?)\)/g;
+                        var output = content.replace(reg, function (string, match) {
+                            var imagePaths = match.split('/'),
+                                len = imagePaths.length,
+                                imageName = imagePaths[len - 1],
+                                newImageName = fileCata + '_' + imageName;
+
+                            imagePaths.splice(len - 1, 1, newImageName);
+                            return imagePaths.join('/');
+                        });
+
+                        return output;
+                    }
+                },
                 files: [
                     {
+                        src: ['src/slide*/*.html'],
+                        dest: 'tmp/template.html'
+                    },
+                    {
                         src: ['src/lib/*.js'],
-                        dest: 'output/lib.min.js'
+                        dest: 'tmp/lib.js'
                     },
                     {
                         src: ['src/base/js/*.js', 'src/slide?/*.js'],
-                        dest: 'output/base.min.js'
+                        dest: 'tmp/base.js'
+                    },
+                    {
+                        src: ['src/lib/*.css'],
+                        dest: 'tmp/lib.css'
+
+                    },
+                    {
+                        src: ['src/base/css/*.less', 'src/slide?/*.less'],
+                        dest: 'tmp/base.less'
                     }
                 ]
             }
         },
         copy: {
-            all: {
+            image: {
                 files: [
                     {
                         src: ['src/slide?/img/*.{png,jpg,jpeg,gif}', 'src/base/img/*.{png,jpg,jpeg,gif}'],
-                        dest: 'output/img',
+                        dest: 'output/img/',
                         expand: true,
-                        flatten: true
-                    }
+                        //处理各个目录下图片命名冲突问题
+                        rename: function (dest, src) {
+                            var paths = src.split('/'),
+                                cata = paths[1],
+                                name = paths[paths.length - 1];
 
+                            grunt.config.images.push('"img/' + cata + '_' + name + '"');
+                            return dest + cata + '_' + name;
+                        }
+                    },
+
+                ]
+            },
+            file: {
+                files:[
+                    {
+                        src: ['tmp/lib.js'],
+                        dest: 'output/lib.min.js'
+                    },
+                    {
+                        src: ['tmp/base.js'],
+                        dest: 'output/base.min.js'
+                    }
                 ]
             }
         },
+
+        replace: {
+            image: {
+                src: ['output/base.min.js'],
+                overwrite: true,
+                replacements: [
+                    {
+                        from: /__images__/g,
+                        to: function () {
+                            return grunt.config.images.join();
+                        }
+                    }
+                ]
+            }
+
+        },
+
+        less: {
+            options: {
+                compress: false,
+                plugins: [
+                    new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
+                ]
+            },
+            all: {
+                files: [
+                    {
+                        src: ['tmp/lib.css'],
+                        dest: 'output/lib.min.css'
+                    },
+                    {
+                        src: ['tmp/base.less'],
+                        dest: 'output/base.min.css'
+                    }
+                ]
+            }
+        },
+
+/*
+        uglify: {
+            options: {
+                compress: false,
+                beautify: false
+            },
+            all: {
+                files: [
+                    {
+                        src: ['tmp/lib.js'],
+                        dest: 'output/lib.min.js'
+                    },
+                    {
+                        src: ['tmp/base.js'],
+                        dest: 'output/base.min.js'
+                    }
+                ]
+            }
+        },
+*/
+
         includereplace: {
             all: {
                 files: [
@@ -108,15 +183,12 @@ module.exports = function (grunt) {
                         src: 'tmp'
                     }
                 ]
-            },
-            yo: {
-                files: [
-                    {
-                        src: ['src']
-                    }
-                ]
             }
 
+        },
+        watch: {
+            files: ['src/**/*.*'],
+            tasks: ['default']
         }
 
 
@@ -124,7 +196,6 @@ module.exports = function (grunt) {
 
 
     //default task
-    grunt.registerTask('default', ['jshint', 'less', 'concat:html', 'uglify', 'includereplace', 'copy', 'clean:all']);
-    grunt.registerTask('dev', ['jshint', 'less', 'concat', 'includereplace', 'copy', 'clean:all']);
+    grunt.registerTask('default', ['jshint', 'concat', 'copy', 'replace', 'less', 'includereplace', 'clean']);
 
 };

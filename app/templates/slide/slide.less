@@ -1,9 +1,7 @@
 /*
     添加单页的 CSS（LESS） 样式
-    注意：各 slide 中图片命名不能重复
  */
 
 .slide<%= slideIndex %> {
-    background: url('img/bg.jpg') center center no-repeat;
-    background-size: cover;
+    background: url(__uri('img/bg.jpg'))  no-repeat;
 }
