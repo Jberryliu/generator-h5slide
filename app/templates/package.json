@@ -12,7 +12,10 @@
     "grunt-contrib-jshint": "^0.11.0",
     "grunt-contrib-less": "^1.0.0",
     "grunt-contrib-uglify": "^0.7.0",
+    "grunt-contrib-watch": "^0.6.1",
     "grunt-include-replace": "^2.0.0",
+    "grunt-text-replace": "^0.4.0",
+    "less-plugin-autoprefix": "^1.4.0",
     "load-grunt-tasks": "^3.1.0",
     "time-grunt": "^1.0.0"
   }
