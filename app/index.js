@@ -48,7 +48,7 @@ module.exports = yeoman.generators.Base.extend({
                 type: 'checkbox',
                 name: 'libs',
                 message: 'Select required extend libs: (click "space" for choosing)',
-                choices: ['kinetic', 'animate.css']
+                choices: ['animate.css', 'kinetic']
             },
             {
                 name: 'slidesNumber',
@@ -102,7 +102,7 @@ module.exports = yeoman.generators.Base.extend({
         //生成基础文件
         var fileList = this.expand(this.templatePath('base/**/*.*'));
         fileList.forEach(function (file) {
-            if (file.indexOf('init_slides') !== -1) {
+            if (file.indexOf('stage') !== -1) {
 
                 this.fs.copyTpl(
                     file,
@@ -173,13 +173,13 @@ module.exports = yeoman.generators.Base.extend({
 
         //生成 grunt 配置文件
         this.fs.copy(
-            this.templatePath('Gruntfile.js'),
+            this.templatePath('_Gruntfile.js'),
             this.destinationPath('Gruntfile.js')
         );
 
         //生成 node 配置文件
         this.fs.copy(
-            this.templatePath('package.json'),
+            this.templatePath('_package.json'),
             this.destinationPath('package.json')
         );
 
