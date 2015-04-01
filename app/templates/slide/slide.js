@@ -9,6 +9,7 @@ define('slide<%= slideIndex %>', [], function (require) {
     var conf = {
         index: <%= slideIndex-1 %>,
         selector: '.slide<%= slideIndex %>',
+	arrowType: 'blue',
 
         init: function ($slide) {
 

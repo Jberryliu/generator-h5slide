@@ -1,4 +1,9 @@
 /* basic style */
+body {
+    margin: 0;
+    padding: 0;
+}
+
 #loading {
     position: absolute;
     z-index: 9;
@@ -7,7 +12,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    color: rgb(109,160,238);
+    color: rgb(109, 160, 238);
     background-color: #fff;
 
     .graph, .progress {
@@ -20,7 +25,7 @@
         width: 64px;
         height: 64px;
         margin: -32px 0 0 -32px;
-        border: 8px solid rgba(109,160,238,.8);
+        border: 8px solid rgba(109, 160, 238, .8);
         border-right: 8px solid #fff;
         border-radius: 100%;
         animation: rotate .8s linear infinite;
@@ -35,6 +40,36 @@
     }
 }
 
+#stage {
+    display: none;
+    .arrow {
+        position: absolute;
+        z-index: 99;
+
+        width: 28px;
+        height: 15px;
+        left: 50%;
+        bottom: 30px;
+
+        margin-left: -14px;
+
+        background-size: cover;
+        animation: arrowShake 1s linear infinite;
+
+        &.blue {
+            background-image: url(__uri('img/arrow_blue.png'));
+        }
+
+        &.white {
+            background-image: url(__uri('img/arrow_white.png'));
+        }
+
+        &.hide {
+            display: none;
+        }
+    }
+}
+
 /* keyframes */
 @keyframes rotate {
     0% {
@@ -45,7 +80,20 @@
     }
 }
 
-#stage {
-    display: none;
+@keyframes arrowShake {
+    0% {
+        transform: translate3d(0, 20px, 0);
+        opacity: 0
+    }
+
+    60% {
+        transform: translate3d(0, 6px, 0);
+        opacity: 1
+    }
+
+    100% {
+        transform: translate3d(0, 0, 0);
+        opacity: 0
+    }
 }
 

@@ -89,7 +89,7 @@ module.exports = function (grunt) {
                             grunt.config.images.push('"img/' + cata + '_' + name + '"');
                             return dest + cata + '_' + name;
                         }
-                    },
+                    }
 
                 ]
             },
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
 
         replace: {
             image: {
-                src: ['output/base.min.js'],
+                src: ['tmp/base.js'],
                 overwrite: true,
                 replacements: [
                     {
@@ -144,11 +144,10 @@ module.exports = function (grunt) {
             }
         },
 
-/*
         uglify: {
             options: {
-                compress: false,
-                beautify: false
+                compress: true,
+                beautify: true
             },
             all: {
                 files: [
@@ -163,7 +162,6 @@ module.exports = function (grunt) {
                 ]
             }
         },
-*/
 
         includereplace: {
             all: {
@@ -196,6 +194,7 @@ module.exports = function (grunt) {
 
 
     //default task
-    grunt.registerTask('default', ['jshint', 'concat', 'copy', 'replace', 'less', 'includereplace', 'clean']);
+    grunt.registerTask('default', ['jshint', 'concat', 'copy:image', 'replace', 'less', 'copy:file', 'includereplace', 'clean']);
+    grunt.registerTask('release', ['jshint', 'concat', 'copy:image', 'replace', 'less', 'uglify', 'includereplace']);
 
 };

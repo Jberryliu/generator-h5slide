@@ -12,7 +12,7 @@ define('slides', [], function () {
 
         this.backgroundConf = {
             width: 640,
-            height: 1008
+            height: 960
         };
 
         this.config = {
@@ -39,6 +39,8 @@ define('slides', [], function () {
                     height: this.deviceConf.height
                 })
                 .swiper(this.config);
+
+            this.arrow = $('#stage').find('.arrow').addClass('blue');
 
         },
 
@@ -73,10 +75,11 @@ define('slides', [], function () {
         process: function (slide, type) {
             var activeIndex = slide.activeIndex,
                 activeSlide = slide.slides[activeIndex],
-                callback = this.selActiveSlide(activeIndex);
+                conf = this.selActiveSlide(activeIndex);
 
-            if (callback) {
-                callback[type].call(this, $(activeSlide));
+            if (conf) {
+                this.arrowHandle(type, conf.arrowType);
+                conf[type].call(this, $(activeSlide));
             }
         },
 
@@ -135,8 +138,8 @@ define('slides', [], function () {
 
             if (imageRadio <= deviceRadio) {
                 //设备宽太大，横向剪裁
-                var needHeight = Math.floor(imageRadio * this.deviceConf.width);
-                offsetY = (needHeight - this.deviceConf.width) / 2;
+                var needHeight = Math.floor(this.deviceConf.width / imageRadio);
+                offsetY = (this.deviceConf.height - needHeight) / 2;
                 sizeConf = '100% auto';
             }
             else if (imageRadio > deviceRadio) {
@@ -149,7 +152,29 @@ define('slides', [], function () {
                 'backgroundSize': sizeConf,
                 'backgroundPosition': offsetX + 'px ' + offsetY + 'px'
             });
+        },
+
+        arrowHandle: function (type, arrowType) {
+            if (type == 'after') {
+                this.arrowShow(arrowType);
+            }
+            else {
+                this.arrowHide();
+            }
+        },
+
+        arrowShow: function (type) {
+            if (type) {
+                this.arrow
+                    .removeClass()
+                    .addClass('arrow ' + type);
+            }
+
+        },
+        arrowHide: function () {
+            this.arrow.addClass('hide');
         }
+
     };
 
     return new Slides();
