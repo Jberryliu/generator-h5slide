@@ -1,22 +1,26 @@
 {
-  "name": "h5slide",
-  "version": "1.0.0",
-  "description": "h5 slide",
-  "author": "berry",
-  "license": "ISC",
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-concat": "^0.5.0",
-    "grunt-contrib-copy": "^0.7.0",
-    "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-less": "^1.0.0",
-    "grunt-contrib-uglify": "^0.7.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-include-replace": "^2.0.0",
-    "grunt-text-replace": "^0.4.0",
-    "less-plugin-autoprefix": "^1.4.0",
-    "load-grunt-tasks": "^3.1.0",
-    "time-grunt": "^1.0.0"
+  "name": "generator-h5slide",
+  "version": "0.0.6",
+  "description": "HTML5 滑动组件生成器",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "yeoman-generator",
+    "slide"
+  ],
+  "repository": "berryliu/generator-h5slide",
+  "author": {
+    "name": "Berry Liu",
+    "email": "liuyz0602@163.com",
+    "url": "https://github.com/berryliu"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "yeoman-generator": "^0.18.7"
+  },
+  "bugs": {
+    "url": "https://github.com/berryliu/generator-h5slide/issues"
   }
 }
